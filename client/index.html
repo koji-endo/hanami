@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .circle {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background-color: crimson;
+      }
+      .connected {
+        background-color: indigo;
+      }
+      .hellosent {
+        background-color: green;
+      }
+    </style>
+    <div id="indicator" class="circle"></div>
+    <input type="button" id="sample" value="送信" />
+    <input type="button" id="fullView" value="全画面" />
+    <img
+      id="fullImage"
+      src="https://blog-imgs-50-origin.fc2.com/m/e/m/memoonline/windows7.jpg"
+    />
+    <script>
+      let indicator = document.getElementById("indicator");
+      let fullView = document.getElementById("fullView");
+      let fullImage = document.getElementById("fullImage");
+      let sock = new WebSocket("ws://127.0.0.1:5001");
+
+      // 接続
+      sock.addEventListener("open", function(e) {
+        console.log("Socket 接続成功");
+        indicator.classList.add("connected");
+        sock.send("hello");
+        indicator.classList.add("hellosent");
+      });
+
+      // サーバーからデータを受け取る
+      sock.addEventListener("message", function(e) {
+        fullImage.src = e.data;
+        console.log(e.data);
+      });
+
+      document.addEventListener("DOMContentLoaded", function(e) {
+        // サーバーにデータを送る
+        // document
+        //   .getElementById("sample")
+        //   .addEventListener("click", function(e) {
+        // });
+      });
+
+      fullView.addEventListener("click", () => {
+        fullImage.requestFullscreen();
+      });
+    </script>
+  </body>
+</html>
